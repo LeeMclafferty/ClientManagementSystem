@@ -161,6 +161,12 @@
     <Compile Include="src\Client\Client.cs" />
     <Compile Include="src\Client\ClientIds.cs" />
     <Compile Include="src\Database\DbConnection.cs" />
+    <Compile Include="UpdateApptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateApptForm.Designer.cs">
+      <DependentUpon>UpdateApptForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UpdateClient.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -198,6 +204,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UpdateApptForm.resx">
+      <DependentUpon>UpdateApptForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UpdateClient.resx">
       <DependentUpon>UpdateClient.cs</DependentUpon>
     </EmbeddedResource>

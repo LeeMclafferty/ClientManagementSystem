@@ -54,8 +54,13 @@ namespace ClientAppointmentManager
 
             foreach (DataRow row in dt.Rows)
             {
-                row["start"] = DateTime.SpecifyKind(Convert.ToDateTime(row["start"]), DateTimeKind.Utc).ToLocalTime();
-                row["end"] = DateTime.SpecifyKind(Convert.ToDateTime(row["end"]), DateTimeKind.Utc).ToLocalTime();
+                DateTime startValue = (DateTime)row["start"];
+                DateTime endValue = (DateTime)row["end"];
+
+                Console.WriteLine($"Start: {startValue}, End: {endValue}");
+
+                row["start"] = startValue.ToLocalTime(); 
+                row["end"] = endValue.ToLocalTime(); 
             }
 
             parent.DgvBuffer.DataSource = dt;

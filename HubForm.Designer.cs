@@ -52,6 +52,8 @@ namespace ClientAppointmentManager
             this.BtnNewAppt = new System.Windows.Forms.Button();
             this.LblApptFound = new System.Windows.Forms.Label();
             this.LbLTotalNum = new System.Windows.Forms.Label();
+            this.BtnApptUpdate = new System.Windows.Forms.Button();
+            this.BtnApptDelete = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -65,16 +67,16 @@ namespace ClientAppointmentManager
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(292, 319);
+            this.pictureBox1.Size = new System.Drawing.Size(395, 319);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.pictureBox2.Location = new System.Drawing.Point(310, 12);
+            this.pictureBox2.Location = new System.Drawing.Point(413, 12);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(568, 319);
+            this.pictureBox2.Size = new System.Drawing.Size(465, 319);
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
@@ -90,9 +92,9 @@ namespace ClientAppointmentManager
             // DgvClients
             // 
             this.DgvClients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DgvClients.Location = new System.Drawing.Point(330, 34);
+            this.DgvClients.Location = new System.Drawing.Point(435, 34);
             this.DgvClients.Name = "DgvClients";
-            this.DgvClients.Size = new System.Drawing.Size(528, 256);
+            this.DgvClients.Size = new System.Drawing.Size(423, 256);
             this.DgvClients.TabIndex = 3;
             // 
             // DgvReports
@@ -108,13 +110,13 @@ namespace ClientAppointmentManager
             this.DgvCalendar.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DgvCalendar.Location = new System.Drawing.Point(51, 34);
             this.DgvCalendar.Name = "DgvCalendar";
-            this.DgvCalendar.Size = new System.Drawing.Size(213, 186);
+            this.DgvCalendar.Size = new System.Drawing.Size(326, 186);
             this.DgvCalendar.TabIndex = 5;
             // 
             // DtpStart
             // 
             this.DtpStart.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DtpStart.Location = new System.Drawing.Point(51, 226);
+            this.DtpStart.Location = new System.Drawing.Point(104, 226);
             this.DtpStart.Name = "DtpStart";
             this.DtpStart.Size = new System.Drawing.Size(81, 20);
             this.DtpStart.TabIndex = 6;
@@ -122,7 +124,7 @@ namespace ClientAppointmentManager
             // DtpEnd
             // 
             this.DtpEnd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DtpEnd.Location = new System.Drawing.Point(182, 226);
+            this.DtpEnd.Location = new System.Drawing.Point(235, 226);
             this.DtpEnd.Name = "DtpEnd";
             this.DtpEnd.Size = new System.Drawing.Size(81, 20);
             this.DtpEnd.TabIndex = 7;
@@ -130,7 +132,7 @@ namespace ClientAppointmentManager
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(149, 230);
+            this.label1.Location = new System.Drawing.Point(202, 230);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(16, 13);
             this.label1.TabIndex = 8;
@@ -138,7 +140,7 @@ namespace ClientAppointmentManager
             // 
             // BtnUpdate
             // 
-            this.BtnUpdate.Location = new System.Drawing.Point(350, 296);
+            this.BtnUpdate.Location = new System.Drawing.Point(435, 296);
             this.BtnUpdate.Name = "BtnUpdate";
             this.BtnUpdate.Size = new System.Drawing.Size(131, 23);
             this.BtnUpdate.TabIndex = 9;
@@ -148,7 +150,7 @@ namespace ClientAppointmentManager
             // 
             // BtnAdd
             // 
-            this.BtnAdd.Location = new System.Drawing.Point(529, 296);
+            this.BtnAdd.Location = new System.Drawing.Point(584, 296);
             this.BtnAdd.Name = "BtnAdd";
             this.BtnAdd.Size = new System.Drawing.Size(131, 23);
             this.BtnAdd.TabIndex = 10;
@@ -158,7 +160,7 @@ namespace ClientAppointmentManager
             // 
             // BtnRemove
             // 
-            this.BtnRemove.Location = new System.Drawing.Point(708, 296);
+            this.BtnRemove.Location = new System.Drawing.Point(727, 296);
             this.BtnRemove.Name = "BtnRemove";
             this.BtnRemove.Size = new System.Drawing.Size(131, 23);
             this.BtnRemove.TabIndex = 11;
@@ -168,7 +170,7 @@ namespace ClientAppointmentManager
             // 
             // BtnRange
             // 
-            this.BtnRange.Location = new System.Drawing.Point(51, 250);
+            this.BtnRange.Location = new System.Drawing.Point(104, 250);
             this.BtnRange.Name = "BtnRange";
             this.BtnRange.Size = new System.Drawing.Size(98, 23);
             this.BtnRange.TabIndex = 12;
@@ -178,7 +180,7 @@ namespace ClientAppointmentManager
             // 
             // BtnAll
             // 
-            this.BtnAll.Location = new System.Drawing.Point(166, 250);
+            this.BtnAll.Location = new System.Drawing.Point(219, 250);
             this.BtnAll.Name = "BtnAll";
             this.BtnAll.Size = new System.Drawing.Size(98, 23);
             this.BtnAll.TabIndex = 13;
@@ -230,7 +232,7 @@ namespace ClientAppointmentManager
             // 
             this.LblAppointments.AutoSize = true;
             this.LblAppointments.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.LblAppointments.Location = new System.Drawing.Point(112, 15);
+            this.LblAppointments.Location = new System.Drawing.Point(169, 15);
             this.LblAppointments.Name = "LblAppointments";
             this.LblAppointments.Size = new System.Drawing.Size(94, 17);
             this.LblAppointments.TabIndex = 18;
@@ -240,7 +242,7 @@ namespace ClientAppointmentManager
             // 
             this.LblClients.AutoSize = true;
             this.LblClients.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.LblClients.Location = new System.Drawing.Point(572, 15);
+            this.LblClients.Location = new System.Drawing.Point(626, 15);
             this.LblClients.Name = "LblClients";
             this.LblClients.Size = new System.Drawing.Size(50, 17);
             this.LblClients.TabIndex = 19;
@@ -248,9 +250,9 @@ namespace ClientAppointmentManager
             // 
             // BtnNewAppt
             // 
-            this.BtnNewAppt.Location = new System.Drawing.Point(51, 279);
+            this.BtnNewAppt.Location = new System.Drawing.Point(104, 279);
             this.BtnNewAppt.Name = "BtnNewAppt";
-            this.BtnNewAppt.Size = new System.Drawing.Size(213, 23);
+            this.BtnNewAppt.Size = new System.Drawing.Size(98, 23);
             this.BtnNewAppt.TabIndex = 20;
             this.BtnNewAppt.Text = "Schedule New Appointment";
             this.BtnNewAppt.UseVisualStyleBackColor = true;
@@ -274,11 +276,33 @@ namespace ClientAppointmentManager
             this.LbLTotalNum.TabIndex = 22;
             this.LbLTotalNum.Text = "0";
             // 
+            // BtnApptUpdate
+            // 
+            this.BtnApptUpdate.Location = new System.Drawing.Point(219, 279);
+            this.BtnApptUpdate.Name = "BtnApptUpdate";
+            this.BtnApptUpdate.Size = new System.Drawing.Size(98, 23);
+            this.BtnApptUpdate.TabIndex = 23;
+            this.BtnApptUpdate.Text = "Update";
+            this.BtnApptUpdate.UseVisualStyleBackColor = true;
+            this.BtnApptUpdate.Click += new System.EventHandler(this.BtnApptUpdate_Click);
+            // 
+            // BtnApptDelete
+            // 
+            this.BtnApptDelete.Location = new System.Drawing.Point(160, 305);
+            this.BtnApptDelete.Name = "BtnApptDelete";
+            this.BtnApptDelete.Size = new System.Drawing.Size(98, 23);
+            this.BtnApptDelete.TabIndex = 24;
+            this.BtnApptDelete.Text = "Delete";
+            this.BtnApptDelete.UseVisualStyleBackColor = true;
+            this.BtnApptDelete.Click += new System.EventHandler(this.BtnApptDelete_Click);
+            // 
             // HubForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(894, 620);
+            this.Controls.Add(this.BtnApptDelete);
+            this.Controls.Add(this.BtnApptUpdate);
             this.Controls.Add(this.LbLTotalNum);
             this.Controls.Add(this.LblApptFound);
             this.Controls.Add(this.BtnNewAppt);
@@ -340,5 +364,7 @@ namespace ClientAppointmentManager
         private System.Windows.Forms.Button BtnNewAppt;
         private System.Windows.Forms.Label LblApptFound;
         private System.Windows.Forms.Label LbLTotalNum;
+        private System.Windows.Forms.Button BtnApptUpdate;
+        private System.Windows.Forms.Button BtnApptDelete;
     }
 }

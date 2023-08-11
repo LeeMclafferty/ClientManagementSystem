@@ -76,6 +76,17 @@ namespace ClientAppointmentManager
             DataTable dt = new DataTable();
             adapter.Fill(dt);
 
+            foreach (DataRow row in dt.Rows)
+            {
+                DateTime startValue = (DateTime)row["start"];
+                DateTime endValue = (DateTime)row["end"];
+
+                Console.WriteLine($"Start: {startValue}, End: {endValue}");
+
+                row["start"] = startValue.ToLocalTime();
+                row["end"] = endValue.ToLocalTime();
+            }
+
             parent.DgvBuffer.DataSource = dt;
             parent.SetTotalNumLbl(GetTotalAppointments(selectedType, selectedMonth));
             parent.SetReportDgv();

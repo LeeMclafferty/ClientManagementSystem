@@ -21,6 +21,16 @@ namespace ClientAppointmentManager
             InitializeComponent();
             SetAppointmentTypes();
             parentForm = parent;
+
+            DtpTimeStart.ShowUpDown = true;
+            DtpTimeStart.CustomFormat = "MM/dd/yyyy hh:mm tt"; // Corrected the format here
+            DtpTimeStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            
+            DtpTimeEnd.ShowUpDown = true;
+            DtpTimeEnd.CustomFormat = "MM/dd/yyyy hh:mm tt"; // Corrected the format here
+            DtpTimeEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+
+            CbType.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         private void SetAppointmentTypes()
@@ -38,10 +48,8 @@ namespace ClientAppointmentManager
 
             appt.customerId = TbId.Text;
             appt.customerName = TbClientName.Text;
-            appt.dateStart = DtpDateStart.Value;
-            appt.timeStart = DtpTimeStart.Value;
-            appt.dateEnd = DtpDateEnd.Value;
-            appt.timeEnd = DtpTimeEnd.Value;
+            appt.timeStart = DtpTimeStart.Value.ToUniversalTime();
+            appt.timeEnd = DtpTimeEnd.Value.ToUniversalTime();
             appt.type = CbType.Text;
 
             appt.Schedule(parentForm.currentUserId, parentForm.currentUser);
@@ -62,8 +70,8 @@ namespace ClientAppointmentManager
             }
 
             // Check End date / time comes after start date / time
-            DateTime startDateTime = DtpDateStart.Value.Date + DtpTimeStart.Value.TimeOfDay;
-            DateTime endDateTime = DtpDateEnd.Value.Date + DtpTimeEnd.Value.TimeOfDay;
+            DateTime startDateTime = DtpTimeStart.Value.Date + DtpTimeStart.Value.TimeOfDay;
+            DateTime endDateTime = DtpTimeEnd.Value.Date + DtpTimeEnd.Value.TimeOfDay;
 
             if (endDateTime <= startDateTime)
             {
@@ -71,12 +79,30 @@ namespace ClientAppointmentManager
                 return false;
             }
 
-            if (DtpTimeStart.Value.Hour < 9 || (DtpTimeStart.Value.Hour == 16 && DtpTimeStart.Value.Minute > 0) ||
-                DtpTimeEnd.Value.Hour < 9 || (DtpTimeEnd.Value.Hour == 17 && DtpTimeEnd.Value.Minute > 0))
+            TimeZoneInfo pstZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            DateTime startTimeInPST;
+            DateTime endTimeInPST;
+
+            if (TimeZoneInfo.Local.Id == pstZone.Id)
             {
-                MessageBox.Show("Appointments should be scheduled between 9 AM to 5 PM.");
+                // If the local time is already in PST, no conversion is needed.
+                startTimeInPST = DtpTimeStart.Value;
+                endTimeInPST = DtpTimeEnd.Value;
+            }
+            else
+            {
+                // Convert the local time to PST.
+                startTimeInPST = TimeZoneInfo.ConvertTime(DtpTimeStart.Value, TimeZoneInfo.Local, pstZone);
+                endTimeInPST = TimeZoneInfo.ConvertTime(DtpTimeEnd.Value, TimeZoneInfo.Local, pstZone);
+            }
+
+            if (startTimeInPST.Hour < 9 || (startTimeInPST.Hour == 16 && startTimeInPST.Minute > 0) ||
+                endTimeInPST.Hour < 9 || (endTimeInPST.Hour == 17 && endTimeInPST.Minute > 0))
+            {
+                MessageBox.Show("Appointments should be scheduled between 9 AM to 5 PM. PST");
                 return false;
             }
+
 
             // Check for overlapping appointments for the currentUser in the appointment table
             string userIdQuery = "SELECT userId FROM user WHERE userName = @userName";

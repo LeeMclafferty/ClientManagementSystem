@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using ClientAppointmentManager.src.Database;
 using ClientAppointmentManager.src.Client;
+using System.Text.RegularExpressions;
+using ClientAppointmentManager.src.Appointment;
 
 namespace ClientAppointmentManager
 {
@@ -30,6 +32,7 @@ namespace ClientAppointmentManager
             RefreshCalendarDgv();
             DgvClients.AllowUserToAddRows = false;
             DgvCalendar.AllowUserToDeleteRows = false;
+            DgvReports.AllowUserToAddRows = false;
             SetDgvHeaders();
         }
 
@@ -191,34 +194,45 @@ namespace ClientAppointmentManager
             result = command.ExecuteScalar();
             cust.ids.countryId = result.ToString();
         }
-
         public void RefreshCalendarDgv()
         {
             MySqlConnection conn = src.Database.DbConnection.conn;
 
             string query = @"
-            SELECT 
-            customer.customerId,
-            customer.customerName,
-            appointment.type,
-            CONVERT_TZ(appointment.start, '+00:00', @@session.time_zone) AS local_start,
-            CONVERT_TZ(appointment.end, '+00:00', @@session.time_zone) AS local_end
-            FROM appointment 
-            JOIN customer ON appointment.customerId = customer.customerId";
+                SELECT 
+                customer.customerId,
+                customer.customerName,
+                appointment.type,
+                appointment.start AS utcStart,
+                appointment.end AS utcEnd
+                FROM appointment 
+                JOIN customer ON appointment.customerId = customer.customerId";
 
             MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn);
 
             DataTable dt = new DataTable();
             adapter.Fill(dt);
 
-            // Use a lambda to transform the column names
+            foreach (DataRow row in dt.Rows)
+            {
+                row["utcStart"] = DateTime.SpecifyKind((DateTime)row["utcStart"], DateTimeKind.Utc).ToLocalTime();
+                row["utcEnd"] = DateTime.SpecifyKind((DateTime)row["utcEnd"], DateTimeKind.Utc).ToLocalTime();
+            }
+
+
             Action<string, string> renameColumn = (oldName, newName) => dt.Columns[oldName].ColumnName = newName;
-            renameColumn("local_start", "start"); // Using lambda to avoid repeating lines.
-            renameColumn("local_end", "end");
+            renameColumn("utcStart", "start");
+            renameColumn("utcEnd", "end");
 
             DgvCalendar.DataSource = dt;
-            DgvCalendar.Columns["start"].DefaultCellStyle.Format = "g";
-            DgvCalendar.Columns["end"].DefaultCellStyle.Format = "g";
+            DgvCalendar.Columns["start"].DefaultCellStyle.Format = "MM/dd/yyyy h:mm tt";
+            DgvCalendar.Columns["end"].DefaultCellStyle.Format = "MM/dd/yyyy h:mm tt";
+
+            foreach (DataGridViewColumn column in DgvCalendar.Columns)
+            {
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            }
+
         }
 
         private void BtnRange_Click(object sender, EventArgs e)
@@ -469,6 +483,85 @@ namespace ClientAppointmentManager
             DgvReports.Columns["start"].HeaderText = "Start Time";
             DgvReports.Columns["end"].HeaderText = "End Time";
             DgvReports.Columns["type"].HeaderText = "Appt. Type";
+        }
+
+        private void BtnApptDelete_Click(object sender, EventArgs e)
+        {
+            if (DgvCalendar.SelectedRows.Count > 0)
+            {
+                if (MessageBox.Show("Are you sure that you want to delete this appointment and all related data?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    MySqlConnection conn = src.Database.DbConnection.conn;
+
+                    string customerId = DgvCalendar.SelectedRows[0].Cells["customerId"].Value.ToString();
+
+                    DateTime startTimeLocal = Convert.ToDateTime(DgvCalendar.SelectedRows[0].Cells["start"].Value);
+                    DateTime endTimeLocal = Convert.ToDateTime(DgvCalendar.SelectedRows[0].Cells["end"].Value);
+
+                    DateTime startTimeUTC = startTimeLocal.ToUniversalTime();
+                    DateTime endTimeUTC = endTimeLocal.ToUniversalTime();
+
+                    string getAppointmentIdQuery = "SELECT appointmentId FROM appointment WHERE customerId = @customerId AND start = @startTimeUTC AND end = @endTimeUTC";
+                    MySqlCommand getAppIdCommand = new MySqlCommand(getAppointmentIdQuery, conn);
+                    getAppIdCommand.Parameters.AddWithValue("@customerId", customerId);
+                    getAppIdCommand.Parameters.AddWithValue("@startTimeUTC", startTimeUTC);
+                    getAppIdCommand.Parameters.AddWithValue("@endTimeUTC", endTimeUTC);
+
+                    object result = getAppIdCommand.ExecuteScalar();
+                    if (result == null)
+                    {
+                        MessageBox.Show("Appointment not found!");
+                        return;
+                    }
+
+                    string appointmentId = result.ToString();
+
+                    MySqlTransaction transaction = conn.BeginTransaction();
+
+                    try
+                    {
+
+                        string deleteAppointmentQuery = "DELETE FROM appointment WHERE appointmentId = @appointmentId";
+                        MySqlCommand deleteAppointmentCommand = new MySqlCommand(deleteAppointmentQuery, conn);
+                        deleteAppointmentCommand.Parameters.AddWithValue("@appointmentId", appointmentId);
+                        deleteAppointmentCommand.Transaction = transaction;
+                        deleteAppointmentCommand.ExecuteNonQuery();
+
+                        transaction.Commit();
+
+                        RefreshCalendarDgv(); 
+                        MessageBox.Show("Appointment and all related data deleted successfully!");
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"An error occurred: {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        private void BtnApptUpdate_Click(object sender, EventArgs e)
+        {
+            if (DgvCalendar.SelectedRows.Count <= 0 || DgvCalendar.SelectedRows.Count > 1)
+            {
+                MessageBox.Show("You must select a single row to update.");
+                return;
+            }
+            else
+            {
+                DataGridViewRow row = DgvCalendar.SelectedRows[0];
+                Appointment appointment = new Appointment(
+                    row.Cells["customerId"].Value.ToString(),
+                    row.Cells["customerName"].Value.ToString(),
+                    row.Cells["type"].Value.ToString(),
+                    (DateTime)row.Cells["start"].Value,
+                    (DateTime)row.Cells["end"].Value
+                ) ;
+
+                UpdateApptForm updateForm = new UpdateApptForm(this, appointment);
+                updateForm.Show();
+            }
         }
     }
 }

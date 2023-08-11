@@ -35,13 +35,11 @@ namespace ClientAppointmentManager
             this.LblId = new System.Windows.Forms.Label();
             this.CbType = new System.Windows.Forms.ComboBox();
             this.LblType = new System.Windows.Forms.Label();
-            this.DtpDateStart = new System.Windows.Forms.DateTimePicker();
             this.DtpTimeStart = new System.Windows.Forms.DateTimePicker();
             this.BtnSchedule = new System.Windows.Forms.Button();
             this.LblDateStart = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.DtpTimeEnd = new System.Windows.Forms.DateTimePicker();
-            this.DtpDateEnd = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
             // 
             // LblName
@@ -97,20 +95,11 @@ namespace ClientAppointmentManager
             this.LblType.TabIndex = 40;
             this.LblType.Text = "Appointment Type";
             // 
-            // DtpDateStart
-            // 
-            this.DtpDateStart.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DtpDateStart.Location = new System.Drawing.Point(36, 26);
-            this.DtpDateStart.Name = "DtpDateStart";
-            this.DtpDateStart.Size = new System.Drawing.Size(97, 20);
-            this.DtpDateStart.TabIndex = 0;
-            // 
             // DtpTimeStart
             // 
-            this.DtpTimeStart.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.DtpTimeStart.Location = new System.Drawing.Point(139, 26);
+            this.DtpTimeStart.Location = new System.Drawing.Point(44, 26);
             this.DtpTimeStart.Name = "DtpTimeStart";
-            this.DtpTimeStart.Size = new System.Drawing.Size(97, 20);
+            this.DtpTimeStart.Size = new System.Drawing.Size(192, 20);
             this.DtpTimeStart.TabIndex = 1;
             // 
             // BtnSchedule
@@ -143,19 +132,10 @@ namespace ClientAppointmentManager
             // 
             // DtpTimeEnd
             // 
-            this.DtpTimeEnd.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.DtpTimeEnd.Location = new System.Drawing.Point(135, 67);
+            this.DtpTimeEnd.Location = new System.Drawing.Point(44, 67);
             this.DtpTimeEnd.Name = "DtpTimeEnd";
-            this.DtpTimeEnd.Size = new System.Drawing.Size(97, 20);
+            this.DtpTimeEnd.Size = new System.Drawing.Size(188, 20);
             this.DtpTimeEnd.TabIndex = 3;
-            // 
-            // DtpDateEnd
-            // 
-            this.DtpDateEnd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DtpDateEnd.Location = new System.Drawing.Point(32, 67);
-            this.DtpDateEnd.Name = "DtpDateEnd";
-            this.DtpDateEnd.Size = new System.Drawing.Size(97, 20);
-            this.DtpDateEnd.TabIndex = 2;
             // 
             // AddApptForm
             // 
@@ -164,11 +144,9 @@ namespace ClientAppointmentManager
             this.ClientSize = new System.Drawing.Size(265, 242);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.DtpTimeEnd);
-            this.Controls.Add(this.DtpDateEnd);
             this.Controls.Add(this.LblDateStart);
             this.Controls.Add(this.BtnSchedule);
             this.Controls.Add(this.DtpTimeStart);
-            this.Controls.Add(this.DtpDateStart);
             this.Controls.Add(this.LblType);
             this.Controls.Add(this.CbType);
             this.Controls.Add(this.LblId);
@@ -190,12 +168,10 @@ namespace ClientAppointmentManager
         private System.Windows.Forms.Label LblId;
         private System.Windows.Forms.ComboBox CbType;
         private System.Windows.Forms.Label LblType;
-        private System.Windows.Forms.DateTimePicker DtpDateStart;
         private System.Windows.Forms.DateTimePicker DtpTimeStart;
         private System.Windows.Forms.Button BtnSchedule;
         private System.Windows.Forms.Label LblDateStart;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DateTimePicker DtpTimeEnd;
-        private System.Windows.Forms.DateTimePicker DtpDateEnd;
     }
 }
